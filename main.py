@@ -5,12 +5,17 @@ import tkinter as tk
 from tkinter import ttk
 
 class Main(tk.Frame):
-    def __init__(self, root):
-        super().__init__(root)
-        self.init_main()
+  def __init__(self, root):
+    super().__init__(root)
+    self.init_main()
 
-    def init_main(self):
-        pass
+  def init_main(self):
+    toolbar = tk.Frame(bg='#d7d8e0', bd=2)
+    toolbar.pack(side=tk.TOP, fill=tk.X)
+
+    self.add_img = tk.PhotoImage(file='resourses/images/add.gif')
+    btn_open_dialog = tk.Button(toolbar, text='Добавить фото', command=self.open_dialog, bg='#d7d8e0', bd=0, compound=tk.TOP, image=self.add_img)
+    btn_open_dialog.pack(side=tk.LEFT)
 
 
 if __name__ == "__main__":
