@@ -1,8 +1,9 @@
 import os, glob
-# from PIL import Image
 import tkinter as tk
 from tkinter import ttk
-from tkinter.filedialog import Open
+from tkinter import messagebox, filedialog
+
+from editImage import EditImage
 
 class Main(tk.Frame):
   def __init__(self, root):
@@ -32,9 +33,9 @@ class Add(tk.Toplevel):
     super().__init__(root)
     self.init_add()
     self.view = app
-    self.selected_image = None
 
   def init_add(self):
+    self.selected_image = None
     self.title("Добавить изображение")
     self.geometry("400x220+400+300")
     self.resizable(False, False)
@@ -44,6 +45,8 @@ class Add(tk.Toplevel):
 
     self.btn_select_file = ttk.Button(self, text="Открыть", command=self.open_file_dialog)
     self.btn_select_file.place(x=120, y=20)
+
+    if self.selected_image: self.btn_select_file.configure(text="Выбрано")
 
     btn_cancel = ttk.Button(self, text="Отмена", command=self.destroy)
     btn_cancel.place(x=220, y=180)
@@ -55,19 +58,25 @@ class Add(tk.Toplevel):
     self.focus_set()
 
   def open_file_dialog(self):
-    file = tk.filedialog.askopenfile(initialdir = "/", title = "Выберите файл", filetypes = [ ("jpeg files", "*.jpg") ])
-    if (file): self.selected_image = file.name
+    file = filedialog.askopenfile(initialdir = "/", title = "Выберите файл", filetypes = [ ("jpeg files", "*.jpg") ])
+    if (file):
+      self.selected_image = file.name
+      self.btn_select_file.configure(text="Выбрано")
     else: self.selected_image = None
 
   def add(self):
     file_path = self.selected_image
     if file_path:
       print(file_path)
+      # images.append(file_path)
+      # print(images)
+      self.destroy()
 
 if __name__ == "__main__":
   root = tk.Tk()
   app = Main(root)
   app.pack()
+
   root.title("Image Resizer")
   root.geometry("650x450+300+200")
   root.resizable(False, False)
