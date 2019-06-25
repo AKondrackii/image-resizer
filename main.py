@@ -9,8 +9,17 @@ class Main(tk.Frame):
   def __init__(self, root):
     super().__init__(root)
     self.init_main()
+    self.resize_to = (0, 0)
+    self.images = []
+    self.view_images
 
   def init_main(self):
+    self.resize_to = (800, 600)
+    self.images = [
+      { "image_path": "C:/Users/chebu/Pictures/c78ed41f439e32d264483598febddc83.jpg", "original_size": (1706, 1142), "resized_size": self.resize_to },
+      { "image_path": "C:/Users/chebu/Pictures/IMG_2360.CR2", "original_size": (3456, 5184), "resized_size": self.resize_to }
+    ]
+
     toolbar = tk.Frame(bg='#d7d8e0', bd=2)
     toolbar.pack(side=tk.TOP, fill=tk.X)
 
@@ -40,14 +49,20 @@ class Main(tk.Frame):
 
     self.tree.pack()
 
+  def view_images(self):
+    [self.tree.delete(i) for i in self.tree.get_children()]
+    [self.tree.insert('', 'end', values=row) for row in self.images]
+
   def open_add_image_dialog(self):
     Add()
 
   def open_delete_dialog(self):
-    pass
+    self.open_start_dialog()
 
   def open_start_dialog(self):
-    EditImage().resize(image_path="C:/Users/chebu/Pictures/D5dBZsIXxSY.jpg", resolution=(800, 600))
+    for image in self.images:
+      EditImage().resize(image_path=image.image_path, resolution=image.original_size)
+      print(image)
 
 class Add(tk.Toplevel):
   def __init__(self):
