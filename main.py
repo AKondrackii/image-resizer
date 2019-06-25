@@ -32,6 +32,7 @@ class Add(tk.Toplevel):
     super().__init__(root)
     self.init_add()
     self.view = app
+    self.selected_image = None
 
   def init_add(self):
     self.title("Добавить изображение")
@@ -39,30 +40,29 @@ class Add(tk.Toplevel):
     self.resizable(False, False)
 
     label_select_file = ttk.Label(self, text="Выберите файл:")
-    label_select_file.place(x=20, y=52.5)
+    label_select_file.place(x=20, y=22.5)
 
-    self.btn_select_file = ttk.Button(self, text="Открыть", command=self.add_to_list())
-    self.btn_select_file.place(x=120, y=50)
-    # self.btn_select_file.bind("<Button-1>", lambda event: self.add_to_list() )
+    self.btn_select_file = ttk.Button(self, text="Открыть", command=self.open_file_dialog)
+    self.btn_select_file.place(x=120, y=20)
 
     btn_cancel = ttk.Button(self, text="Отмена", command=self.destroy)
     btn_cancel.place(x=220, y=180)
 
-    self.btn_ok = ttk.Button(self, text="Добавить")
+    self.btn_ok = ttk.Button(self, text="Добавить", command=self.add)
     self.btn_ok.place(x=300, y=180)
-    # self.btn_ok.bind('<Button-2>', lambda event: self.view.records(self.entry_description.get(), self.combobox.get(), self.entry_money.get()))
 
     self.grab_set()
     self.focus_set()
 
   def open_file_dialog(self):
     file = tk.filedialog.askopenfile(initialdir = "/", title = "Выберите файл", filetypes = [ ("jpeg files", "*.jpg") ])
-    if (file): return file.name
-    else: return None
+    if (file): self.selected_image = file.name
+    else: self.selected_image = None
 
-  def add_to_list(self):
-    file_path = self.open_file_dialog()
-    if file_path: print(file_path)
+  def add(self):
+    file_path = self.selected_image
+    if file_path:
+      print(file_path)
 
 if __name__ == "__main__":
   root = tk.Tk()
