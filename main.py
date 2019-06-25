@@ -14,13 +14,17 @@ class Main(tk.Frame):
     toolbar = tk.Frame(bg='#d7d8e0', bd=2)
     toolbar.pack(side=tk.TOP, fill=tk.X)
 
-    self.add_img = tk.PhotoImage(file='resourses/images/add.gif')
+    self.add_img = tk.PhotoImage(file="resourses/images/add.gif")
     btn_open_add_image_dialog = tk.Button(toolbar, text='Добавить фото', command=self.open_add_image_dialog, bg='#d7d8e0', bd=0, compound=tk.TOP, image=self.add_img)
     btn_open_add_image_dialog.pack(side=tk.LEFT)
 
-    self.delete_image = tk.PhotoImage(file='resourses/images/delete.gif')
+    self.delete_image = tk.PhotoImage(file="resourses/images/delete.gif")
     btn_delete_dialog = tk.Button(toolbar, text='Удалить', bg='#d7d8e0', bd=0, image=self.delete_image, compound=tk.TOP, command=self.open_delete_dialog)
     btn_delete_dialog.pack(side=tk.LEFT)
+
+    self.start_image = tk.PhotoImage(file="resourses/images/start.gif")
+    btn_start_dialog = tk.Button(toolbar, text="Начать", bg="#d7d8e0", bd=0, image=self.start_image, compound=tk.TOP, command=self.open_start_dialog)
+    btn_start_dialog.pack(side=tk.RIGHT)
 
     self.tree = ttk.Treeview(self, columns=('ID', 'image_path', 'original_size', 'resized_size'), height=15, show='headings')
 
@@ -41,6 +45,9 @@ class Main(tk.Frame):
 
   def open_delete_dialog(self):
     pass
+
+  def open_start_dialog(self):
+    EditImage().resize(image_path="C:/Users/chebu/Pictures/D5dBZsIXxSY.jpg", resolution=(800, 600))
 
 class Add(tk.Toplevel):
   def __init__(self):
@@ -63,7 +70,7 @@ class Add(tk.Toplevel):
     self.label_selected_file = ttk.Label(self, text="Файл не выбран")
     self.label_selected_file.place(x=200, y=22.5)
 
-    self.btn_cancel = ttk.Button(self, text="Отмена", command=None)
+    self.btn_cancel = ttk.Button(self, text="Отмена", command=self.destroy)
     self.btn_cancel.place(x=220, y=65)
 
     self.btn_ok = ttk.Button(self, text="Добавить", command=self.add)
@@ -98,7 +105,7 @@ if __name__ == "__main__":
   EditImage()
 
   root.title("Image Resizer")
-  root.geometry("650x450+300+200")
+  root.geometry("650x460+300+200")
   root.resizable(False, False)
   root.iconbitmap("resourses/images/favicon.ico")
   root.mainloop()
