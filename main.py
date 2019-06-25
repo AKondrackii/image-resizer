@@ -22,6 +22,20 @@ class Main(tk.Frame):
     btn_delete_dialog = tk.Button(toolbar, text='Удалить', bg='#d7d8e0', bd=0, image=self.delete_image, compound=tk.TOP, command=self.open_delete_dialog)
     btn_delete_dialog.pack(side=tk.LEFT)
 
+    self.tree = ttk.Treeview(self, columns=('ID', 'image_path', 'original_size', 'resized_size'), height=15, show='headings')
+
+    self.tree.column("ID", width=30, anchor=tk.CENTER)
+    self.tree.column("image_path", width=315, anchor=tk.CENTER)
+    self.tree.column("original_size", width=150, anchor=tk.CENTER)
+    self.tree.column("resized_size", width=150, anchor=tk.CENTER)
+
+    self.tree.heading("ID", text="№")
+    self.tree.heading("image_path", text="Путь до фото")
+    self.tree.heading("original_size", text="Ориг. разрешение")
+    self.tree.heading("resized_size", text="Измен. разрешение")
+
+    self.tree.pack()
+
   def open_add_image_dialog(self):
     Add()
 
@@ -35,9 +49,9 @@ class Add(tk.Toplevel):
     self.view = app
 
   def init_add(self):
-    self.selected_image = None
+    self.selected_file = None
     self.title("Добавить изображение")
-    self.geometry("400x220+400+300")
+    self.geometry("400x100+400+300")
     self.resizable(False, False)
 
     label_select_file = ttk.Label(self, text="Выберите файл:")
@@ -46,26 +60,30 @@ class Add(tk.Toplevel):
     self.btn_select_file = ttk.Button(self, text="Открыть", command=self.open_file_dialog)
     self.btn_select_file.place(x=120, y=20)
 
-    if self.selected_image: self.btn_select_file.configure(text="Выбрано")
+    self.label_selected_file = ttk.Label(self, text="Файл не выбран")
+    self.label_selected_file.place(x=200, y=22.5)
 
-    btn_cancel = ttk.Button(self, text="Отмена", command=self.destroy)
-    btn_cancel.place(x=220, y=180)
+    self.btn_cancel = ttk.Button(self, text="Отмена", command=None)
+    self.btn_cancel.place(x=220, y=65)
 
     self.btn_ok = ttk.Button(self, text="Добавить", command=self.add)
-    self.btn_ok.place(x=300, y=180)
+    self.btn_ok.place(x=300, y=65)
 
     self.grab_set()
     self.focus_set()
 
   def open_file_dialog(self):
     file = filedialog.askopenfile(initialdir = "/", title = "Выберите файл", filetypes = [ ("jpeg files", "*.jpg") ])
-    if (file):
-      self.selected_image = file.name
+    
+    if file:
+      self.selected_file = file.name
       self.btn_select_file.configure(text="Выбрано")
-    else: self.selected_image = None
+      self.label_selected_file.configure(text=self.selected_file.split("/")[-1])
+      self.btn_ok.configure(command=self.destroy)
+    else: self.selected_file = None
 
   def add(self):
-    file_path = self.selected_image
+    file_path = self.selected_file
     if file_path:
       print(file_path)
       # images.append(file_path)
@@ -76,6 +94,8 @@ if __name__ == "__main__":
   root = tk.Tk()
   app = Main(root)
   app.pack()
+
+  EditImage()
 
   root.title("Image Resizer")
   root.geometry("650x450+300+200")
