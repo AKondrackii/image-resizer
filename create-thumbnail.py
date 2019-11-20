@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, argparse
 from platform import system
 from PIL import Image
 
@@ -13,7 +13,7 @@ def get_photos():
         photos.append(os.path.join(root, file))
   return photos
 
-def thumbnailing(path, size=512):
+def thumbnailing(path, size):
   filename = os.path.split('\\' if system == 'Windows' else '/')[-1]
   photo = Image.open(path)
   photo.thumbnail([size, size], Image.ANTIALIAS)
@@ -21,9 +21,12 @@ def thumbnailing(path, size=512):
   print(filename)
 
 def main():
+  parser = argparse.ArgumentParser()
+  parser.add_argument("-s" ,"--size", type=int, help="You must specify the width!", default=512)
+  args = parser.parse_args()
+
   for photo in get_photos():
-    thumbnailing(photo, int(sys.argv[1]))
+    thumbnailing(photo, args.size)
 
 if __name__ == "__main__":
-  if (len(sys.argv) >= 2): main()
-  else: print("You must specify the width!")
+  main()
